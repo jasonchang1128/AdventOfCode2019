@@ -41,4 +41,14 @@ for intersect_coord in res_list:
 
 print("The intersection of two lists is : " + str(res_list))
 
+# First Part Answer
 print("Min Manhattan Distance is: " + str(min(manhat_dist_list)))
+
+# Second Part
+combined_steps_list = []
+for intersect_coord in res_list:
+    steps_one = next(i for i, cur_coord in enumerate(Grid_One) if cur_coord == intersect_coord) + 1
+    steps_two = next(i for i, cur_coord in enumerate(Grid_Two) if cur_coord == intersect_coord) + 1
+    combined_steps_list.append(steps_one + steps_two)
+
+print("Min Combined Steps is: " + str(min(combined_steps_list)))
