@@ -5,9 +5,9 @@ def opcode2_mult(parlist, pos1, pos2, outpos):
     parlist[outpos] = parlist[pos1] * parlist[pos2]
 
 def val_from_parameter_mode(parameter_mode, desired_list, param_position):
-    if parameter_mode == 1:
+    if parameter_mode == 1:  # Immediate Mode.
         return desired_list[param_position]
-    elif parameter_mode == 0:
+    elif parameter_mode == 0:  # Position Mode.
         return desired_list[desired_list[param_position]]
 
 def get_diag_output(instruction_list, input):
@@ -19,20 +19,50 @@ def get_diag_output(instruction_list, input):
         if actual_opcode == 1:  # Add Opcode, read, read, Write.
             param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
             param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
-            instruction_list[instruction_list[CurPos + 3]] = param1 + param2
+            instruction_list[instruction_list[CurPos + 3]] = param1 + param2  # always position mode.
             CurPos += 4
         elif actual_opcode == 2:  # Mult opcode, read, read, write.
             param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
             param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
-            instruction_list[instruction_list[CurPos + 3]] = param1 * param2
+            instruction_list[instruction_list[CurPos + 3]] = param1 * param2  # always position mode.
             CurPos += 4
         elif actual_opcode == 3:  # Set param pos to input.
-            instruction_list[instruction_list[CurPos+1]] = input  # always immediate mode cause write.
+            instruction_list[instruction_list[CurPos+1]] = input  # always position mode.
             CurPos += 2
         elif actual_opcode == 4:
             param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
             output = param1
             CurPos += 2
+        elif actual_opcode == 5:  # jump if true: opcode, non-zero, jump-pos
+            param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
+            param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
+            if param1 != 0:
+                CurPos = param2
+            else:
+                CurPos += 3
+        elif actual_opcode == 6:  # jump if false: opcode, zero, jump-pos
+            param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
+            param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
+            if param1 == 0:
+                CurPos = param2
+            else:
+                CurPos += 3
+        elif actual_opcode == 7:  # less than: opcode, param1 < param2, 1 or 0
+            param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
+            param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
+            if param1 < param2:
+                instruction_list[instruction_list[CurPos + 3]] = 1
+            else:
+                instruction_list[instruction_list[CurPos + 3]] = 0
+            CurPos += 4
+        elif actual_opcode == 8:  # equals than: opcode, param1 == param2, 1 or 0
+            param1 = val_from_parameter_mode(opcode_list[2], instruction_list, CurPos+1)
+            param2 = val_from_parameter_mode(opcode_list[1], instruction_list, CurPos+2)
+            if param1 == param2:
+                instruction_list[instruction_list[CurPos + 3]] = 1
+            else:
+                instruction_list[instruction_list[CurPos + 3]] = 0
+            CurPos += 4
         elif actual_opcode == 99:
             print("Finished")
             break
@@ -49,3 +79,10 @@ CurList = MemList.copy()
 cur_input = 1
 # Part 1 Answer.
 print( get_diag_output(CurList, cur_input) )
+
+CurList = MemList.copy()
+
+cur_input = 5
+# Part 2 Answer.
+print( get_diag_output(CurList, cur_input) )
+
