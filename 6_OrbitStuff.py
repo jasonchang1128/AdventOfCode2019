@@ -38,3 +38,13 @@ for final_orbit in list_of_total_orbits:
 
 # Day 6 Part 1 answer
 print(total_num_orbits)
+
+# Part 2
+you_orbit = list_of_total_orbits[next(i for i, CurOrbit in enumerate(list_of_total_orbits) if CurOrbit[-1] == "YOU")]
+san_orbit = list_of_total_orbits[next(i for i, CurOrbit in enumerate(list_of_total_orbits) if CurOrbit[-1] == "SAN")]
+CurIdx = 0
+while you_orbit[CurIdx] == san_orbit[CurIdx]:
+    CurIdx += 1
+
+# Day 6 Part 2 answer
+print((len(you_orbit) - CurIdx-1) + (len(san_orbit) - CurIdx-1))
