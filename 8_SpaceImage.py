@@ -12,3 +12,16 @@ MinLayerIdx = Layers_Num0.index(min(Layers_Num0))
 
 # Day 8 Part 1
 print(Layers_List[MinLayerIdx].count("1") * Layers_List[MinLayerIdx].count("2"))
+
+# Part 2
+FinalImage = []
+for idx in range(25*6):
+    for layer in Layers_List:
+        if layer[idx] == "0" or layer[idx] == "1":
+            FinalImage.append(layer[idx])
+            break
+
+FinalImageLines = [FinalImage[x:x+25] for x in range(0, len(FinalImage), 25)]
+for Line in FinalImageLines:
+    print(Line)
+print("HZCZU")
